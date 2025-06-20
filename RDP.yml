@@ -15,7 +15,7 @@ jobs:
           Expand-Archive ngrok.zip -DestinationPath .
       
       - name: Authenticate ngrok
-        run: .\ngrok.exe authtoken YOUR_NGROK_AUTH_TOKEN
+        run: .\ngrok.exe authtoken 2ymFrrZBYY6dv64f6iPvSrFcGNT_75zwwE6zmZbjidXABzAuW
 
       - name: Start ngrok TCP tunnel
         run: Start-Process .\ngrok.exe "tcp 3389"
