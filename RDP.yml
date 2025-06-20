@@ -13,26 +13,20 @@ jobs:
         run: |
           Invoke-WebRequest https://bin.equinox.io/c/bNyj1mQVY4c/ngrok-stable-windows-amd64.zip -OutFile ngrok.zip
           Expand-Archive ngrok.zip -DestinationPath .
-      
+
       - name: Authenticate ngrok
-        run: .\ngrok.exe authtoken 2ymFrrZBYY6dv64f6iPvSrFcGNT_75zwwE6zmZbjidXABzAuW
+        run: .\ngrok.exe authtoken YOUR_NGROK_AUTH_TOKEN
 
-      - name: Start ngrok TCP tunnel
-        run: Start-Process .\ngrok.exe "tcp 3389"
-
-      - name: Enable RDP Access
+      - name: Enable RDP
         run: |
           Set-ItemProperty -Path "HKLM:\System\CurrentControlSet\Control\Terminal Server" -Name "fDenyTSConnections" -Value 0
           Enable-NetFirewallRule -DisplayGroup "Remote Desktop"
 
-      - name: Create new user
+      - name: Create RDP user
         run: |
           net user az7x P@ssw0rd123 /add
           net localgroup administrators az7x /add
 
-      - name: Show connection info
-        run: |
-          Write-Output "RDP is enabled."
-          Write-Output "Username: az7x"
-          Write-Output "Password: P@ssw0rd123"
-          Write-Output "Wait 1-2 minutes then check ngrok dashboard for TCP address."
+      - name: Start ngrok TCP tunnel and show address
+        run: .\ngrok.exe tcp 3389
+
